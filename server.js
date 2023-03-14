@@ -1,8 +1,8 @@
 const express = require("express");
 const path = require("path");
 const notes = require("./db/db.json");
-const generateId = require('./helper/generateId');
-const fs = require('fs');
+const generateId = require("./helper/generateId");
+const fs = require("fs");
 const PORT = process.env.PORT || 3002;
 const app = express();
 
@@ -26,31 +26,46 @@ app.get("*", (req, res) => {
 app.post("/api/notes", (req, res) => {
   const { title, text } = req.body;
   if (title && text) {
-    const newNote = { title, text ,note_ID:generateId()};
-   fs.readFile('./db/db.json','utf-8',(err,data)=>{
-    if(err){
+    const newNote = { title, text, note_ID: generateId() };
+    fs.readFile("./db/db.json", "utf-8", (err, data) => {
+      if (err) {
         console.error(err);
-    }
-    else {
-        
-    let parsedData=JSON.parse(data)
-   
-    parsedData.push(newNote)
-    fs.writeFile('./db/db.json',JSON.stringify(parsedData),(err)=>{
-        if(err){
-            console.log(err)
-        }
-        else{
-            res.send("data wrriten")
-        }
-    })
-    }
-   })
+      } else {
+        let parsedData = JSON.parse(data);
 
+        parsedData.push(newNote);
+        fs.writeFile("./db/db.json", JSON.stringify(parsedData), (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send("data wrriten");
+          }
+        });
+      }
+    });
+  } else {
+    res.status(404).send("title and text requred");
   }
-  else{
-    res.status(404).send("title and text requred")
-  }
+});
+app.delete("/api/notes/:id", (req, res) => {
+  const { id } = req.params;
+
+  fs.readFile("./db/db.json", "utf-8", (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      let parsedData = JSON.parse(data);
+      let filtersarry = parsedData.filter((elm) => elm.note_ID !== id);
+      console.log(filtersarry);
+      fs.writeFile("./db/db.json", JSON.stringify(filtersarry), (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send("data deleted");
+        }
+      });
+    }
+  });
 });
 
 app.listen(PORT, () => console.log(`server running at http://localhost:3002/`));
