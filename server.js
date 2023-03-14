@@ -1,19 +1,19 @@
 const express = require("express");
 const path = require("path");
-const notes = require("./Develop/db/db.json");
-const generateId = require("./helper/generateId");
+const notes = require("./db/db.json");
+const generateId = require('./helper/generateId');
 const fs = require('fs');
 const PORT = process.env.PORT || 3002;
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("Develop/public"));
+app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 app.get("/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
   //res.json(notes)
 });
 
@@ -21,13 +21,13 @@ app.get("/api/notes", (req, res) => {
   res.status(200).json(notes);
 });
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "Develop/public/index.html"));
+  res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 app.post("/api/notes", (req, res) => {
   const { title, text } = req.body;
   if (title && text) {
     const newNote = { title, text ,note_ID:generateId()};
-   fs.readFile('./Develop/db/db.json','utf-8',(err,data)=>{
+   fs.readFile('./db/db.json','utf-8',(err,data)=>{
     if(err){
         console.error(err);
     }
@@ -36,7 +36,7 @@ app.post("/api/notes", (req, res) => {
     let parsedData=JSON.parse(data)
    
     parsedData.push(newNote)
-    fs.writeFile('./Develop/db/db.json',JSON.stringify(parsedData),(err)=>{
+    fs.writeFile('./db/db.json',JSON.stringify(parsedData),(err)=>{
         if(err){
             console.log(err)
         }
