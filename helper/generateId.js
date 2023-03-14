@@ -1,4 +1,4 @@
-const allNotes = require("../Develop/db/db.json");
+const allNotes = require("../db/db.json");
 
 const generateId = () => {
   console.log(allNotes.length - 1);
