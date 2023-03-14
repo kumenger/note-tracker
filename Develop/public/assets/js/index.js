@@ -75,6 +75,7 @@ const handleNoteSave = () => {
     getAndRenderNotes();
     renderActiveNote();
   });
+   setInterval(()=>{window.location.reload()},1000) 
 };
 
 // Delete the clicked note
@@ -168,6 +169,7 @@ const renderNoteList = async (notes) => {
   if (window.location.pathname === '/notes') {
     noteListItems.forEach((note) => noteList[0].append(note));
   }
+ 
 };
 
 // Gets notes from the db and renders them to the sidebar
