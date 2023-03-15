@@ -43,6 +43,8 @@ const saveNote = (note) =>
   });
 
 const deleteNote = (id) =>
+
+
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
@@ -75,17 +77,18 @@ const handleNoteSave = () => {
     getAndRenderNotes();
     renderActiveNote();
   });
-  setTimeout(()=>{window.location.reload()},500)
+ // setTimeout(()=>{window.location.reload()},500)
 };
 
 // Delete the clicked note
 const handleNoteDelete = (e) => {
   // Prevents the click listener for the list from being called when the button inside of it is clicked
-  e.stopPropagation();
+  e.stopPropagation();  
+ 
 
-  const note = e.target;
+  let note=e.target
   const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).note_ID;
-
+ console.log(noteId)
   if (activeNote.note_ID === noteId) {
     activeNote = {};
   }
@@ -94,7 +97,7 @@ const handleNoteDelete = (e) => {
     getAndRenderNotes();
     renderActiveNote();
   });
-  setTimeout(()=>{window.location.reload()},500)
+  //setTimeout(()=>{window.location.reload()},500)
 };
 
 // Sets the activeNote and displays it

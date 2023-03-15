@@ -56,7 +56,7 @@ app.delete("/api/notes/:id", (req, res) => {
     } else {
       let parsedData = JSON.parse(data);
       let filtersarry = parsedData.filter((elm) => elm.note_ID !== id);
-      console.log(filtersarry);
+     
       fs.writeFile("./db/db.json", JSON.stringify(filtersarry), (err) => {
         if (err) {
           console.log(err);
