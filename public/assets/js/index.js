@@ -43,8 +43,6 @@ const saveNote = (note) =>
   });
 
 const deleteNote = (id) =>
-
-
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
@@ -55,7 +53,7 @@ const deleteNote = (id) =>
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
-  if (activeNote.note_ID) {
+  if (activeNote.id) {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
@@ -77,19 +75,17 @@ const handleNoteSave = () => {
     getAndRenderNotes();
     renderActiveNote();
   });
- // setTimeout(()=>{window.location.reload()},500)
 };
 
 // Delete the clicked note
 const handleNoteDelete = (e) => {
   // Prevents the click listener for the list from being called when the button inside of it is clicked
-  e.stopPropagation();  
- 
+  e.stopPropagation();
 
-  let note=e.target
-  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).note_ID;
- console.log(noteId)
-  if (activeNote.note_ID === noteId) {
+  const note = e.target;
+  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+
+  if (activeNote.id === noteId) {
     activeNote = {};
   }
 
@@ -97,7 +93,6 @@ const handleNoteDelete = (e) => {
     getAndRenderNotes();
     renderActiveNote();
   });
-  //setTimeout(()=>{window.location.reload()},500)
 };
 
 // Sets the activeNote and displays it
@@ -173,7 +168,6 @@ const renderNoteList = async (notes) => {
   if (window.location.pathname === '/notes') {
     noteListItems.forEach((note) => noteList[0].append(note));
   }
- 
 };
 
 // Gets notes from the db and renders them to the sidebar
@@ -187,3 +181,4 @@ if (window.location.pathname === '/notes') {
 }
 
 getAndRenderNotes();
+
