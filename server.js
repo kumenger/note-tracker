@@ -26,7 +26,7 @@ app.get("*", (req, res) => {
 app.post("/api/notes", (req, res) => {
   const { title, text } = req.body;
   if (title && text) {
-    const newNote = { title, text, note_ID: generateId() };
+    const newNote = { title, text, id: generateId() };
     fs.readFile("./db/db.json", "utf-8", (err, data) => {
       if (err) {
         console.error(err);
@@ -56,7 +56,7 @@ app.delete("/api/notes/:id", (req, res) => {
     } else {
       let parsedData = JSON.parse(data);
       let filtersarry = parsedData.filter((elm) => elm.note_ID !== id);
-      console.log(filtersarry);
+     
       fs.writeFile("./db/db.json", JSON.stringify(filtersarry), (err) => {
         if (err) {
           console.log(err);
