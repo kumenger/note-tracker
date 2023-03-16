@@ -3,6 +3,8 @@ const path = require("path");
 const notes = require('./db.json');
 const generateId = require("./helper/generateId");
 const fs = require("fs");
+fspromises=require('fs').promises
+
 const PORT = process.env.PORT || 3002;
 const app = express();
 
@@ -27,6 +29,8 @@ app.post("/api/notes", (req, res) => {
   const { title, text } = req.body;
   if (title && text) {
     const newNote = { title, text, id: generateId() };
+   
+
     fs.readFile(__dirname +'/db.json', "utf-8", (err, data) => {
       if (err) {
         console.error(err);
@@ -34,14 +38,22 @@ app.post("/api/notes", (req, res) => {
         let parsedData = JSON.parse(data);
 
         parsedData.push(newNote);
-        fs.writeFileSync(__dirname +'/db.json', JSON.stringify(parsedData), (err) => {
+        console.log(parsedData)
+       async function main(){
+          try {
+            await  fs.writeFile(__dirname +'/db.json', JSON.stringify(parsedData), (err) => {
           if (err) {
             console.log(err);
             res.sendStatus(500);
         } else {
             res.send("data wrriten");
           }
-        });
+        })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+       main()
       }
     });
   } else {
