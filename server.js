@@ -34,7 +34,7 @@ app.post("/api/notes", (req, res) => {
         let parsedData = JSON.parse(data);
 
         parsedData.push(newNote);
-        fs.writeFile(__dirname +'/db.json', JSON.stringify(parsedData), (err) => {
+        fs.writeFileSync(__dirname +'/db.json', JSON.stringify(parsedData), (err) => {
           if (err) {
             console.log(err);
             res.sendStatus(500);
@@ -60,7 +60,7 @@ app.delete("/api/notes/:id", (req, res) => {
       let filtersarry = parsedData.filter((elm) => elm.id !== id);
       console.log(filtersarry)
      
-      fs.writeFile(__dirname +'/db.json', JSON.stringify(filtersarry), (err) => {
+      fs.writeFileSync(__dirname +'/db.json', JSON.stringify(filtersarry), (err) => {
         if (err) {
           console.log(err);
           res.sendStatus(500);
