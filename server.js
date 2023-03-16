@@ -18,7 +18,7 @@ app.get("/notes", (req, res) => {
 });
 
 app.get("/api/notes", (req, res) => {
-  res.status(200).json(notes);
+ return res.status(200).json(notes);
 });
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
@@ -55,7 +55,9 @@ app.delete("/api/notes/:id", (req, res) => {
       console.error(err);
     } else {
       let parsedData = JSON.parse(data);
-      let filtersarry = parsedData.filter((elm) => elm.note_ID !== id);
+     
+      let filtersarry = parsedData.filter((elm) => elm.id !== id);
+      console.log(filtersarry)
      
       fs.writeFile("./db/db.json", JSON.stringify(filtersarry), (err) => {
         if (err) {
