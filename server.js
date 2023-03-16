@@ -27,17 +27,18 @@ app.post("/api/notes", (req, res) => {
   const { title, text } = req.body;
   if (title && text) {
     const newNote = { title, text, id: generateId() };
-    fs.readFile(path.join(__dirname ,'/db.json'), "utf-8", (err, data) => {
+    fs.readFile(__dirname +'/db.json', "utf-8", (err, data) => {
       if (err) {
         console.error(err);
       } else {
         let parsedData = JSON.parse(data);
 
         parsedData.push(newNote);
-        fs.writeFile(path.join(__dirname ,'/db.json'), JSON.stringify(parsedData), (err) => {
+        fs.writeFile(__dirname +'/db.json', JSON.stringify(parsedData), (err) => {
           if (err) {
             console.log(err);
-          } else {
+            res.sendStatus(500);
+        } else {
             res.send("data wrriten");
           }
         });
@@ -50,7 +51,7 @@ app.post("/api/notes", (req, res) => {
 app.delete("/api/notes/:id", (req, res) => {
   const { id } = req.params;
 
-  fs.readFile(path.join(__dirname ,'/db.json'), "utf-8", (err, data) => {
+  fs.readFile(__dirname +'/db.json', "utf-8", (err, data) => {
     if (err) {
       console.error(err);
     } else {
@@ -59,10 +60,11 @@ app.delete("/api/notes/:id", (req, res) => {
       let filtersarry = parsedData.filter((elm) => elm.id !== id);
       console.log(filtersarry)
      
-      fs.writeFile(path.join(__dirname ,'/db.json'), JSON.stringify(filtersarry), (err) => {
+      fs.writeFile(__dirname +'/db.json', JSON.stringify(filtersarry), (err) => {
         if (err) {
           console.log(err);
-        } else {
+          res.sendStatus(500);
+      } else {
           res.send("data deleted");
         }
       });
