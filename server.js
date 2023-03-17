@@ -33,9 +33,7 @@ app.post("/api/notes", (req, res) => {
     let db = fs.readFileSync(__dirname + "/db.json");
     db = JSON.parse(db);
     res.json(db);
-    // creating body for note
-    
-    // pushing created note to be written in the db.json file
+   
     db.push(newNote);
     fs.writeFileSync(__dirname + "/db.json", JSON.stringify(db));
     res.json(db);
@@ -52,29 +50,14 @@ app.post("/api/notes", (req, res) => {
 app.delete("/api/notes/:id", (req, res) => {
   const { id } = req.params;
 
-  fs.readFile(__dirname + "/db.json", "utf-8", (err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
-      let parsedData = JSON.parse(data);
-
-      let filtersarry = parsedData.filter((elm) => elm.id !== id);
-      console.log(filtersarry);
-
-      fs.writeFileSync(
-        __dirname + "/db.json",
-        JSON.stringify(filtersarry),
-        (err) => {
-          if (err) {
-            console.log(err);
-            res.sendStatus(500);
-          } else {
-            res.send("data deleted");
-          }
-        }
-      );
-    }
-  });
+  let db = fs.readFileSync(__dirname + "/db.json");
+    db = JSON.parse(db);
+    let filtersarry = db.filter((elm) => elm.id !== id);
+    res.json(filtersarry);
+   
+ 
+    fs.writeFileSync(__dirname + "/db.json", JSON.stringify(filtersarry));
+    res.json(filtersarry);
 });
 
 app.listen(PORT, () => console.log(`server running at http://localhost:3002/`));
