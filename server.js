@@ -3,7 +3,8 @@ const path = require("path");
 const notes = require('./db/db.json');
 const generateId = require("./helper/generateId");
 const fs = require("fs");
-fspromises = require("fs").promises;
+const store=require('./store')
+
 
 const PORT = process.env.PORT || 3002;
 const app = express();
@@ -30,17 +31,24 @@ app.post("/api/notes", (req, res) => {
   if (title && text) {
     const newNote = { title, text, id: generateId() };
 
-    let db = fs.readFileSync(`${__dirname}/db/db.json`);
-    db = JSON.parse(db);
-    res.json(db);
+    // let db = readFileAsync(`${__dirname}/db/db.json`);
+    // db = JSON.parse(db);
+    // res.json(db);
    
-    db.push(newNote);
-    fs.writeFileSync(`${__dirname}/db/db.json`, JSON.stringify(db));
-    res.json(db);
+    // db.push(newNote);
+    // writeFileAsync(`${__dirname}/db/db.json`, JSON.stringify(db));
+    // res.json(db);
   
-
-  
-  
+    //readFileAsync("db/db.json", "utf8").(notes)=>JSON.parse(notes)).then((notes)=>[...notes,newNote]).then((updatedNotes)=>writeFileAsync("db/db.json", JSON.stringify(updatedNotes))
+  //return  readFileAsync("db/db.json", "utf8").then((notes)=>JSON.parse(notes)).then((notes)=>[...notes,newNote]).then((updatedNote)=>{writeFileAsync('db/db.json'),JSON.stringify(updatedNote)})
+    store
+        .addNote(req.body)
+        .then(note => {
+            res.json(note)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
 
    
   } else {
@@ -49,15 +57,10 @@ app.post("/api/notes", (req, res) => {
 });
 app.delete("/api/notes/:id", (req, res) => {
   const { id } = req.params;
-
-  let db = fs.readFileSync(`${__dirname}/db/db.json`);
-    db = JSON.parse(db);
-    let filtersarry = db.filter((elm) => elm.id !== id);
-    res.json(filtersarry);
-   
- 
-    fs.writeFileSync(`${__dirname}/db/db.json`, JSON.stringify(filtersarry));
-    res.json(filtersarry);
+  store
+  .removeNote(id)
+  .then(() => res.json({ ok: true }))
+  .catch(err => res.status(500).json(err))
 });
 
 app.listen(PORT, () => console.log(`server running at http://localhost:3002/`));
