@@ -30,12 +30,12 @@ app.post("/api/notes", (req, res) => {
   if (title && text) {
     const newNote = { title, text, id: generateId() };
 
-    let db = fs.readFileSync('./db/db.json');
+    let db = fs.readFileSync(`${__dirname}/db/db.json`);
     db = JSON.parse(db);
     res.json(db);
    
     db.push(newNote);
-    fs.writeFileSync('./db/db.json', JSON.stringify(db));
+    fs.writeFileSync(`${__dirname}/db/db.json`, JSON.stringify(db));
     res.json(db);
   
 
@@ -50,13 +50,13 @@ app.post("/api/notes", (req, res) => {
 app.delete("/api/notes/:id", (req, res) => {
   const { id } = req.params;
 
-  let db = fs.readFileSync('./db/db.json');
+  let db = fs.readFileSync(`${__dirname}/db/db.json`);
     db = JSON.parse(db);
     let filtersarry = db.filter((elm) => elm.id !== id);
     res.json(filtersarry);
    
  
-    fs.writeFileSync('./db/db.json', JSON.stringify(filtersarry));
+    fs.writeFileSync(`${__dirname}/db/db.json`, JSON.stringify(filtersarry));
     res.json(filtersarry);
 });
 
