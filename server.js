@@ -13,5 +13,5 @@ app.use('/api', apiRoutes);
 app.use('/', htmlRoutes);
 
 app.listen(PORT, () => {
-    console.log(`http://localhost:3002/${PORT}`);
+    console.log(`http://localhost:${PORT}`);
 });
